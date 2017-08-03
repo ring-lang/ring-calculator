@@ -173,8 +173,6 @@ func ccc
 
 
 func memo
-	MyApp2 = New qApp {
-
         win2 = new qWidget() {
                 setwindowtitle("History Of Ring Calcuator")
                 setwindowmodality(true)
@@ -224,11 +222,3 @@ func memo
 
 			show()
 		}
-        exec()
-
-	}
-
-
-
-
-
