@@ -35,10 +35,15 @@ func checkEnter
 	
 	
 func add2history enum,result
-	pODBC = odbc_init()
-	odbc_connect(pODBC,'DRIVER=SQLite3;Database=calc.db;LongNames=0;Timeout=1000;NoTXN=0;SyncPragma=NORMAL;StepAPI=0;')
-	odbc_execute(pODBC, "insert into `calc` (`math`, `result`) values('"+ enum +"','"+ result +"');")
-	odbc_execute(pODBC, "delete from `calc` order by ID desc limit 20,1000")
-	odbc_disconnect(pODBC)
-	odbc_close(pODBC)
+	oDB = sqlite_init()
+	sqlite_open(oDB,'calc.db')
+	sqlite_execute(oDB, "insert into `calc` (`math`, `result`) values('"+ enum +"','"+ result +"');")
+	sqlite_close(oDB)
 	
+func deletehistory
+	oDB = sqlite_init()
+	sqlite_open(oDB,'calc.db')
+	sqlite_execute(oDB, "delete from calc ;")
+	sqlite_close(oDB)
+	win2.close()
+	memo()

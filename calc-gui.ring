@@ -1,9 +1,13 @@
 load "guilib.ring"
 load "functions.ring"
+load "odbclib.ring"
+load "sqlitelib.ring"
+
 _style="border:1px solid #c0c0c0;background: QLinearGradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #eef, stop: 1 #ccf);"
 num1=0
 num2=0
 m="+"
+win2 = null
 
 MyApp = New qApp {
 
@@ -176,36 +180,48 @@ func memo
                 setwindowmodality(true)
                 setparent(win1)
                 setwinicon(self,"images/calc.png")
-                setFixedSize(550,450)
+                setFixedSize(550,500)
                 setwindowflags( qt_dialog & ~ qt_WindowMaximizeButtonHint)
-                //setGeometry(300,10,550,450)
-                
-				
-				
-				
+
 				Table1 = new qTableWidget(win2) {
-						setGeometry(10,10,530,430)
-                        setrowcount(20) setcolumncount(3)
+						setGeometry(10,10,530,450)
+                        setrowcount(0) setcolumncount(3)
 						setHorizontalHeaderItem(0, new QTableWidgetItem("Function"))
 						setHorizontalHeaderItem(1, new QTableWidgetItem("Result") )
 						setHorizontalHeaderItem(2, new QTableWidgetItem("Date") )
+						setcolumnwidth(2,200)
+						setalternatingrowcolors(True)
 						
-						
-						pODBC = odbc_init()
-						n=odbc_connect(pODBC,'DRIVER=SQLite3;Database=calc.db;LongNames=0;Timeout=1000;NoTXN=0;SyncPragma=NORMAL;StepAPI=0;')
-						odbc_execute(pODBC,"select * from calc")
-						x=1
-						while odbc_fetch(pODBC)
-							setitem(x-1,0,new qtablewidgetitem(odbc_getdata(pODBC,2)))
-							setitem(x-1,1,new qtablewidgetitem(odbc_getdata(pODBC,3)))
-							setitem(x-1,2,new qtablewidgetitem(odbc_getdata(pODBC,4)))
+						oDB = sqlite_init()
+						n=sqlite_open(oDB,'calc.db')
+						aResult = sqlite_execute(oDB,"select * from calc order by dateline desc")						
+						x = 0
+						for row in aResult
+							insertrow(x)
+							setitem(x,0,new qtablewidgetitem(row[:math]))
+							setitem(x,1,new qtablewidgetitem(row[:result]))
+							setitem(x,2,new qtablewidgetitem(row[:dateline]))
 							x++
-						end
-						odbc_disconnect(pODBC)
-						odbc_close(pODBC)
+						next 
+						sqlite_close(oDB)
 						
                 }
 		
+				new qPushButton(win2) {
+					setText("Delete History")
+					move(340,465)
+					resize(100,30)
+					setClickevent("deletehistory()")
+				}
+
+				new qPushButton(win2) {
+					setText("Close")
+					move(440,465)
+					resize(100,30)
+					setClickevent("win2.close()")
+				}
+
+
 			show()
 		}
         exec()
