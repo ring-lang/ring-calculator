@@ -1,7 +1,19 @@
-load "guilib.ring"
-load "functions.ring"
-load "odbclib.ring"
-load "sqlitelib.ring"
+/*
+ +---------------------------------------------------------------------------------------------------------
+ +     Program Name : Calculator
+ +     Date         : 2016-2017
+ +     Author       : Magdy Ragab
+ +                  : Gal Zsolt (~ CalmoSoft ~)
+ +---------------------------------------------------------------------------------------------------------
+*/
+
+# Load Ring Libraries
+	load "guilib.ring"
+	load "odbclib.ring"
+	load "sqlitelib.ring"
+
+# Load Applications Functions
+	load "functions.ring"
 
 _style="border:1px solid #c0c0c0;background: QLinearGradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #eef, stop: 1 #ccf);"
 num1=0
@@ -17,17 +29,12 @@ MyApp = New qApp {
                 setwindowmodality(true)
                 setFixedSize(290,280)
                 setwindowflags( qt_dialog & ~ qt_WindowMaximizeButtonHint)
-                //setGeometry(10,10,237,280)
-                
+               
                 
                 edit1 = new qlineedit(win1) {
 					setGeometry(10,10,270,32)
 					setalignment(Qt_AlignHCenter)
 					setreturnpressedevent("checkEnter()")
-					//setDisabled(true)
-					//QValidator("Acceptable")
-					//clicked("ccc()")
-					//connect("")
 					setStyleSheet("background-color: lightyellow;color:darkyellow;font-size: 15pt;")
                 }
                 
@@ -175,9 +182,6 @@ MyApp = New qApp {
         }		
         exec()
 }
-
-func ccc
-	see "x"
 
 func memo
         win2 = new qWidget() {
